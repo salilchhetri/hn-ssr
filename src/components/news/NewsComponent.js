@@ -19,7 +19,7 @@ export default class NewsComponent extends Component {
   }
 
   getNews = (page = 1) => {
-    let url = `http://hn.algolia.com/api/v1/${this.state.queryStr}${page}`;
+    let url = `https://hn.algolia.com/api/v1/${this.state.queryStr}${page}`;
     fetch(url)
       .then((response) => response.json())
       .then((news) => {

@@ -1,12 +1,10 @@
-const express = require("express");
-const app = express();
+require("ignore-styles");
+require
 
-const PORT = process.env.PORT || 5500;
-
-app.get("/", (req, res) => {
-  res.json({ message: "Hello from Express App!..." });
+require("@babel/register")({
+  ignore: [/(node_modules)/],
+  presets: ["@babel/preset-env", "@babel/preset-react"],
+  "plugins": ["@babel/plugin-proposal-class-properties"]
 });
 
-app.listen(PORT, () => {
-  console.log(`App running on port ${PORT}`);
-});
+require("./server/server");

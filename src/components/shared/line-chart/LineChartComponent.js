@@ -36,7 +36,6 @@ const options = {
 
 export default function LineChartComponent(props) {
   data.datasets[0].label = props.label;
-  console.log("props", props.data);
   data.labels = [];
   data.datasets[0].data = [];
   props.data.map((prop) => {

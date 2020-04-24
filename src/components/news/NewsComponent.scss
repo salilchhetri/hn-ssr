@@ -1,0 +1,43 @@
+@import "../../theme/theme.scss";
+
+.cssTable {
+  // background: pink;
+  .cssTableRow {
+    display: flex;
+    justify-content: space-between;
+    justify-content: flex-start;
+    padding: 5px 10px;
+  }
+  .el:nth-child(3) {
+    flex: 2;
+  }
+  .cssTableRowWrapper:nth-child(even) {
+    background: $accent-grey;
+  }
+}
+
+.floats {
+  display: flex;
+  .el {
+    min-width: 75px;
+  }
+}
+
+@media only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+  .cssTableRowWrapper {
+    margin-bottom: 10px;
+  }
+  .cssTable {
+    .cssTableRow {
+      flex-direction: column-reverse;
+    }
+  }
+  .articleDetails {
+    display: flex;
+    flex-direction: column;
+  }
+  .cssTableRow {
+    background: $accent-grey;
+  }
+}

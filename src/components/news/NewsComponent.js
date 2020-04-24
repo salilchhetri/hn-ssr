@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Row, Col, Table } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import "./NewsComponent.scss";
 
 import SingleNewsComponent from "./singleNews/SingleNewsComponent";
@@ -28,7 +28,7 @@ export default class NewsComponent extends Component {
     }
 
     //********** Swith the endpoint here
-    fetch('https://hn.algolia.com/api/v1/search?tags=front_page')
+    fetch("https://hn.algolia.com/api/v1/search?tags=front_page")
       // fetch("/stub/data.json")
       .then((response) => response.json())
       .then((news) => {
@@ -102,7 +102,21 @@ export default class NewsComponent extends Component {
       <Container fluid>
         <Row>
           <Col>
-            <Table striped hover size="sm">
+            <div class="cssTable">
+              {this.state.news.length > 0
+                ? this.state.news.map((article, index) => {
+                    return (
+                      <SingleNewsComponent
+                        key={index}
+                        data={article}
+                        handleUpvote={() => this.handleUpvote(article.objectID)}
+                        handleHide={() => this.hideArticles(article.objectID)}
+                      />
+                    );
+                  })
+                : null}
+            </div>
+            {/* <Table striped hover size="sm" responsive>
               <tbody>
                 {this.state.news.length > 0
                   ? this.state.news.map((article, index) => {
@@ -119,7 +133,7 @@ export default class NewsComponent extends Component {
                   })
                   : null}
               </tbody>
-            </Table>
+            </Table> */}
           </Col>
         </Row>
         <Row>
@@ -127,8 +141,8 @@ export default class NewsComponent extends Component {
             {this.state.news.length > 0 ? (
               <LineChart data={this.state.news} label="Upvotes" />
             ) : (
-                ""
-              )}
+              ""
+            )}
           </Col>
         </Row>
       </Container>

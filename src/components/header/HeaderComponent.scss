@@ -1,8 +1,15 @@
+@import "../../theme/theme.scss";
+
 .navbar {
   margin-bottom: 1.5em;
 }
 .navbar-brand {
-  img {
-    max-height: 26px;
+  border: 2px solid $white;
+  display: block;
+  padding: 2px 10px;
+  height: 37px;
+  width: 37px;
+  span {
+    color: white;
   }
 }

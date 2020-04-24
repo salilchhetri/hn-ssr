@@ -52,7 +52,6 @@ export default class NewsComponent extends Component {
         this.setState({ allVotes: allVotesData });
         this.setState({ news });
       });
-    console.log(this.state.news);
   };
 
   componentDidMount() {
@@ -109,7 +108,7 @@ export default class NewsComponent extends Component {
   loadMoreNews = () => {
     this.setState(
       (prevState, props) => ({
-        currentPage: prevState.currentPage++,
+        currentPage: prevState.currentPage + 1
       }),
       () => {
         this.getNews(this.state.currentPage);

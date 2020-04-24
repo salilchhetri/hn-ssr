@@ -13,3 +13,20 @@
     color: white;
   }
 }
+
+.nav-link.active {
+  color: $white !important;
+}
+.navbar-nav a:first-child {
+  display: flex;
+}
+
+.navbar-nav a:first-child:after {
+  content: "";
+  display: block;
+  margin: 0 auto;
+  width: 50%;
+  padding-top: 20px;
+  border-right: 1px solid $black;
+  margin-left: 15px;
+}

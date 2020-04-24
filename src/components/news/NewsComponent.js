@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import "./NewsComponent.scss";
 
 import SingleNewsComponent from "./singleNews/SingleNewsComponent";
@@ -13,25 +13,20 @@ export default class NewsComponent extends Component {
       hidden: [],
       upVotes: [],
       allVotes: [],
+      currentPage: 1,
+      queryStr: "search?tags=front_page&hitsPerPage=10&page=",
     };
   }
 
-  componentDidMount() {
-    let hiddenByUser = JSON.parse(localStorage.getItem("hiddenArticles"));
-    if (hiddenByUser !== null) {
-      this.setState({ hidden: hiddenByUser });
-    }
-
-    let userUpVotes = JSON.parse(localStorage.getItem("userUpVotes"));
-    if (userUpVotes !== null) {
-      this.setState({ upVotes: userUpVotes });
-    }
-
-    //********** Swith the endpoint here
-    fetch("https://hn.algolia.com/api/v1/search?tags=front_page")
-      // fetch("/stub/data.json")
+  getNews = (page = 1) => {
+    let url = `http://hn.algolia.com/api/v1/${this.state.queryStr}${page}`;
+    fetch(url)
       .then((response) => response.json())
       .then((news) => {
+        if (news.hits.length === 0) {
+          alert("No more news available");
+          return;
+        }
         if (this.state.hidden.length > 0) {
           news = news.hits.filter((article) => {
             return !this.state.hidden.includes(article.objectID);
@@ -57,6 +52,20 @@ export default class NewsComponent extends Component {
         this.setState({ allVotes: allVotesData });
         this.setState({ news });
       });
+    console.log(this.state.news);
+  };
+
+  componentDidMount() {
+    let hiddenByUser = JSON.parse(localStorage.getItem("hiddenArticles"));
+    if (hiddenByUser !== null) {
+      this.setState({ hidden: hiddenByUser });
+    }
+
+    let userUpVotes = JSON.parse(localStorage.getItem("userUpVotes"));
+    if (userUpVotes !== null) {
+      this.setState({ upVotes: userUpVotes });
+    }
+    this.getNews();
   }
 
   handleUpvote = (id) => {
@@ -97,43 +106,55 @@ export default class NewsComponent extends Component {
     });
   };
 
+  loadMoreNews = () => {
+    this.setState(
+      (prevState, props) => ({
+        currentPage: prevState.currentPage++,
+      }),
+      () => {
+        this.getNews(this.state.currentPage);
+      }
+    );
+  };
+
   render() {
+    let linkStyle = {
+      color: "#EB6E58",
+      fontSize: "1em",
+      marginTop: "4px",
+    };
     return (
       <Container fluid>
         <Row>
           <Col>
-            <div class="cssTable">
+            <div className="cssTable">
               {this.state.news.length > 0
                 ? this.state.news.map((article, index) => {
-                    return (
-                      <SingleNewsComponent
-                        key={index}
-                        data={article}
-                        handleUpvote={() => this.handleUpvote(article.objectID)}
-                        handleHide={() => this.hideArticles(article.objectID)}
-                      />
-                    );
-                  })
+                  return (
+                    <SingleNewsComponent
+                      key={index}
+                      data={article}
+                      handleUpvote={() => this.handleUpvote(article.objectID)}
+                      handleHide={() => this.hideArticles(article.objectID)}
+                    />
+                  );
+                })
                 : null}
             </div>
-            {/* <Table striped hover size="sm" responsive>
-              <tbody>
-                {this.state.news.length > 0
-                  ? this.state.news.map((article, index) => {
-                    return (
-                      <SingleNewsComponent
-                        key={index}
-                        data={article}
-                        handleUpvote={() =>
-                          this.handleUpvote(article.objectID)
-                        }
-                        handleHide={() => this.hideArticles(article.objectID)}
-                      />
-                    );
-                  })
-                  : null}
-              </tbody>
-            </Table> */}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {this.state.news.length > 0 ? (
+              <Button
+                variant="link"
+                style={linkStyle}
+                className="orangeLink"
+                onClick={this.loadMoreNews}
+              >
+                More
+              </Button>
+            ) : null}
           </Col>
         </Row>
         <Row>
@@ -141,8 +162,8 @@ export default class NewsComponent extends Component {
             {this.state.news.length > 0 ? (
               <LineChart data={this.state.news} label="Upvotes" />
             ) : (
-              ""
-            )}
+                ""
+              )}
           </Col>
         </Row>
       </Container>

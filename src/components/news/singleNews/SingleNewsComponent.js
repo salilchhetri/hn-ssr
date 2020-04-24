@@ -7,28 +7,28 @@ import Button from 'react-bootstrap/Button'
 
 export default function SingleNewsComponent(props) {
     let tmp = document.createElement('a');
-    tmp.href = props.data.url;
+    tmp.href = props.data.story_url ? props.data.story_url : props.data.url;
     return (
         <div className="cssTableRowWrapper">
-            <div class="cssTableRow">
-                <div class="floats">
-                    <div class="el">{props.data.num_comments}</div>
-                    <div class="el">
+            <div className="cssTableRow">
+                <div className="floats">
+                    <div className="el">{props.data.num_comments}</div>
+                    <div className="el">
                         {props.data.points}
                         <IconContext.Provider value={{ className: "upvote" }}>
                             <TiArrowSortedUp onClick={props.handleUpvote} />
                         </IconContext.Provider>
                     </div>
                 </div>
-                <div class="el articleDetails">
+                <div className="el articleDetails">
                     <span className="title">
-                        <a href={props.data.url} target="_blank" rel="noopener noreferrer" >
-                            {props.data.title}
+                        <a href={props.data.story_url ? props.data.story_url : props.data.url} target="_blank" rel="noopener noreferrer" >
+                            {props.data.story_title ? props.data.story_title : props.data.title}
                         </a>
                     </span>
                     <small>
                         <span>
-                            (<a href={props.data.url} target="_blank" rel="noopener noreferrer" className="articleAccent">{tmp.hostname}</a>)
+                            (<a href={props.data.story_url ? props.data.story_url : props.data.url} target="_blank" rel="noopener noreferrer" className="articleAccent">{tmp.hostname}</a>)
                     </span>
                         <span>by</span>
                         <span className="articleAccent">
@@ -37,7 +37,7 @@ export default function SingleNewsComponent(props) {
                             </a>
                         </span>
                         <span className="articleAccent">{moment(props.data.created_at).fromNow()}</span>
-                        <span className="articleAccent">
+                        <span className="articleAccent hide">
                             [
                             <Button variant="link" className="btn-link" onClick={props.handleHide}>hide</Button>
                         ]

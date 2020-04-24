@@ -28,7 +28,7 @@ export default class NewsComponent extends Component {
     }
 
     //********** Swith the endpoint here
-    fetch('http://hn.algolia.com/api/v1/search?tags=front_page')
+    fetch('https://hn.algolia.com/api/v1/search?tags=front_page')
       // fetch("/stub/data.json")
       .then((response) => response.json())
       .then((news) => {
